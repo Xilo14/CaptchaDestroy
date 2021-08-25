@@ -5,6 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "SimpleConsoleClient .NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build SimpleConsoleClient",
+            "program": "${workspaceFolder}/samples/SimpleConsoleClient/bin/Debug/net5.0/SimpleConsoleClient.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/samples/SimpleConsoleClient",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
@@ -13,6 +24,7 @@
             "args": [],
             "cwd": "${workspaceFolder}/src/CaptchaDestroy.Web",
             "stopAtEntry": false,
+            "console": "externalTerminal",
             "serverReadyAction": {
                 "action": "openExternally",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
@@ -28,6 +40,15 @@
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Launch both",
+            "configurations": [
+                "SimpleConsoleClient .NET Core Launch (console)",
+                ".NET Core Launch (web)"
+               ]
         }
     ]
 }
