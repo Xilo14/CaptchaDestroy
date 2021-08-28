@@ -1,15 +1,23 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace CaptchaDestroy.Web.Api
 {
     public class MetaController : BaseApiController
     {
-        /// <summary>
-        /// A sample API Controller. Consider using API Endpoints (see Endpoints folder) for a more SOLID approach to building APIs
-        /// https://github.com/ardalis/ApiEndpoints
-        /// </summary>
+        public MetaController(IDiagnosticContext DiagnosticContext) : base(DiagnosticContext)
+        {
+        }
+
         [HttpGet("/info")]
+        [SwaggerOperation(
+            Summary = "Get meta info",
+            Description = "Get meta info",
+            OperationId = "GetInfo",
+            Tags = new[] { "Meta" })
+        ]
         public ActionResult<string> Info()
         {
             var assembly = typeof(Startup).Assembly;

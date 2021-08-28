@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace CaptchaDestroy.Web.Api
 {
@@ -10,5 +12,13 @@ namespace CaptchaDestroy.Web.Api
     [ApiController]
     public abstract class BaseApiController : Controller
     {
+        protected ILogger logger = Log.Logger;
+        protected IDiagnosticContext _diagnosticContext;
+
+        public BaseApiController(IDiagnosticContext DiagnosticContext)
+        {
+            _diagnosticContext = DiagnosticContext;
+        }
     }
+
 }
