@@ -1,30 +1,51 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.0.46" />
-  
+
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <OutputType>Exe</OutputType>
     <WebProjectMode>true</WebProjectMode>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+
   </PropertyGroup>
-  
+
+
+
   <ItemGroup>
     <PackageReference Include="Ardalis.ApiEndpoints" Version="3.1.0" />
     <PackageReference Include="Ardalis.ListStartupServices" Version="1.1.3" />
     <PackageReference Include="Ardalis.Result" Version="3.0.1" />
     <PackageReference Include="Ardalis.Result.AspNetCore" Version="3.0.1" />
+
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" PrivateAssets="all" Version="5.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="5.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" PrivateAssets="All" Version="5.0.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.2" />
-    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+
+    <PackageReference Include="Serilog.AspNetCore" Version="4.0.0" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.2" />
+    <PackageReference Include="Serilog.Enrichers.AssemblyName" Version="1.0.9" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
+    <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
+    
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\CaptchaDestroy.Infrastructure\CaptchaDestroy.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\TgBotFrameworkDel\TelegramBotFramework\TelegramBotBase\TelegramBotBase.csproj"/>
   </ItemGroup>
-  
+
 </Project>

@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
+using Autofac.Core.Lifetime;
+using Autofac.Extensions.DependencyInjection;
 using CaptchaDestroy.Core.Interfaces;
 using CaptchaDestroy.Core.ProjectAggregate;
 using CaptchaDestroy.Infrastructure.Data;
+using CaptchaDestroy.Infrastructure.Data.Mediator;
 using CaptchaDestroy.SharedKernel.Interfaces;
 using MediatR;
 using MediatR.Pipeline;
@@ -19,7 +23,7 @@ namespace CaptchaDestroy.Infrastructure
         public DefaultInfrastructureModule(bool isDevelopment, Assembly callingAssembly =  null)
         {
             _isDevelopment = isDevelopment;
-            var coreAssembly = Assembly.GetAssembly(typeof(Project)); // TODO: Replace "Project" with any type from your Core project
+            var coreAssembly = Assembly.GetAssembly(typeof(Account)); // TODO: Replace "Project" with any type from your Core project
             var infrastructureAssembly = Assembly.GetAssembly(typeof(StartupSetup));
             _assemblies.Add(coreAssembly);
             _assemblies.Add(infrastructureAssembly);
@@ -50,14 +54,19 @@ namespace CaptchaDestroy.Infrastructure
                 .InstancePerLifetimeScope();
 
             builder
-                .RegisterType<Mediator>()
-                .As<IMediator>()
+                .RegisterType<Publisher>()
                 .InstancePerLifetimeScope();
 
-            builder.Register<ServiceFactory>(context =>
+            builder.Register<ServiceFactoryNested>(context =>
             {
-                var c = context.Resolve<IComponentContext>();
+                var c = context.Resolve<ILifetimeScope>();
                 return t => c.Resolve(t);
+            });
+            builder.Register<ServiceFactoryNeighboured>(context =>
+            {
+                var c = context.Resolve<ILifetimeScope>();
+                var newl = (c as LifetimeScope).RootLifetimeScope.BeginLifetimeScope();
+                return t => newl.Resolve(t);
             });
 
             var mediatrOpenTypes = new[]
@@ -76,7 +85,12 @@ namespace CaptchaDestroy.Infrastructure
                 .AsImplementedInterfaces();
             }
 
-            builder.RegisterType<EmailSender>().As<IEmailSender>()
+            builder
+                .RegisterType<EmailSender>().As<IEmailSender>()
+                .InstancePerLifetimeScope();
+
+            builder
+                .RegisterType<VkCaptchaSolver>().As<IVkCaptchaSolver>()
                 .InstancePerLifetimeScope();
         }
 
