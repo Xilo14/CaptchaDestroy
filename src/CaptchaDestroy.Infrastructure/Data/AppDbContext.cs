@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.EFCore.Extensions;
 using CaptchaDestroy.Core.ProjectAggregate;
+using CaptchaDestroy.Infrastructure.Data.Mediator;
 using CaptchaDestroy.SharedKernel;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,20 +12,20 @@ namespace CaptchaDestroy.Infrastructure.Data
 {
     public class AppDbContext : DbContext
     {
-        private readonly IMediator _mediator;
+        private readonly Publisher _publisher;
 
         //public AppDbContext(DbContextOptions options) : base(options)
         //{
         //}
 
-        public AppDbContext(DbContextOptions<AppDbContext> options, IMediator mediator)
+        public AppDbContext(DbContextOptions<AppDbContext> options, Publisher publisher)
             : base(options)
         {
-            _mediator = mediator;
+            _publisher = publisher;
         }
 
-        public DbSet<ToDoItem> ToDoItems { get; set; }
-        public DbSet<Project> Projects { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Captcha> Captchas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,7 +42,7 @@ namespace CaptchaDestroy.Infrastructure.Data
             int result = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
             // ignore events if no dispatcher provided
-            if (_mediator == null) return result;
+            if (_publisher == null) return result;
 
             // dispatch events only if save was successful
             var entitiesWithEvents = ChangeTracker.Entries<BaseEntity>()
@@ -55,7 +56,7 @@ namespace CaptchaDestroy.Infrastructure.Data
                 entity.Events.Clear();
                 foreach (var domainEvent in events)
                 {
-                    await _mediator.Publish(domainEvent).ConfigureAwait(false);
+                    await _publisher.Publish(domainEvent).ConfigureAwait(false);
                 }
             }
 
@@ -65,6 +66,14 @@ namespace CaptchaDestroy.Infrastructure.Data
         public override int SaveChanges()
         {
             return SaveChangesAsync().GetAwaiter().GetResult();
+        }
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
+        public override ValueTask DisposeAsync()
+        {
+            return base.DisposeAsync();
         }
     }
 }
