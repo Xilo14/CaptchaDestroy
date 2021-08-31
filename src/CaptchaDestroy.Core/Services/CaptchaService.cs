@@ -47,6 +47,16 @@ namespace CaptchaDestroy.Core.Services
             var accountSpec = new AccountBySecretKey(secretKey);
             var account = await _repository.GetBySpecAsync(accountSpec);
 
+            if (account == null)
+            {
+                errors.Add(new ValidationError()
+                {
+                    Identifier = nameof(secretKey),
+                    ErrorMessage = $"{nameof(secretKey)} is wrong."
+                });
+                return Result<Captcha>.Invalid(errors);
+            }
+
             if (account.Points < 100)
             {
                 errors.Add(new ValidationError()
