@@ -454,3 +454,4 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 src/CaptchaDestroy.Web/appsettings.json
+src/CaptchaDestroy.Web/database.sqlite
